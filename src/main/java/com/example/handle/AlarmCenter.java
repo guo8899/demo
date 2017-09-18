@@ -2,6 +2,7 @@ package com.example.handle;
 
 import com.example.entity.Alarm;
 import com.example.entity.AlarmTemplate;
+import com.example.util.AlarmUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,7 +14,6 @@ import java.util.Map;
  * Created by fzy on 2017/9/15.
  */
 @Component
-//@ComponentScan("com.example.handle")
 public class AlarmCenter {
     /**
      *  alarmId, alarmTitle, alarmFormat
@@ -103,5 +103,15 @@ public class AlarmCenter {
     public void setAlarmTemplate() {
         //set alarmTemplateMap 设置告警模板，从数据库或者配置或代码写死获取
         alarmTemplateMap = new HashMap<String, AlarmTemplate>();
+        AlarmTemplate temp = new AlarmTemplate();
+        String tempId = "";
+
+        temp = AlarmUtils.createE189_PROFITRATEWARNING();
+        tempId = temp.getAlarmId();
+        alarmTemplateMap.put(tempId, temp);
+
+        temp = AlarmUtils.createINTENET_WARING();
+        tempId = temp.getAlarmId();
+        alarmTemplateMap.put(tempId, temp);
     }
 }

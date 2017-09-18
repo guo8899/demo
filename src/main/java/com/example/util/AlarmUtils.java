@@ -1,6 +1,7 @@
 package com.example.util;
 
 import com.example.entity.Alarm;
+import com.example.entity.AlarmTemplate;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -12,9 +13,21 @@ import java.util.List;
  * Created by fzy on 2017/9/15.
  */
 public class AlarmUtils {
-    public static Alarm createFirst() {
-        return new Alarm();
+    public static AlarmTemplate createE189_PROFITRATEWARNING() {
+        AlarmTemplate alarmTemplate = new AlarmTemplate();
+        alarmTemplate.setAlarmId(ConstantUtils.E189_PROFITRATEWARNING_ID);
+        alarmTemplate.setAlarmTitle(ConstantUtils.E189_PROFITRATEWARNING_TITLE);
+        alarmTemplate.setAlarmFormat(ConstantUtils.E189_PROFITRATEWARNING_FORMAT);
+        return  alarmTemplate;
     }
+    public static AlarmTemplate createINTENET_WARING() {
+        AlarmTemplate alarmTemplate = new AlarmTemplate();
+        alarmTemplate.setAlarmId(ConstantUtils.INTENET_WARING_ID);
+        alarmTemplate.setAlarmTitle(ConstantUtils.INTENET_WARING_TITLE);
+        alarmTemplate.setAlarmFormat(ConstantUtils.INTENET_WARING_FORMAT);
+        return  alarmTemplate;
+    }
+
     public static String gererate(Alarm alarm) {
         String title = alarm.getAlarmTitle();
         String format = alarm.getAlarmFormat();
