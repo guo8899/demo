@@ -80,7 +80,10 @@ public class AlarmCenter {
     public void init() {
         alarmCounter = new HashMap<String, Integer>();
         alarmMap = new HashMap<String, ArrayList<Alarm>>();
+    }
 
+    public void setAlarmTemplate() {
         //set alarmTemplateMap 设置告警模板，从数据库或者配置或代码写死获取
+        //alarmTemplateMap = new HashMap<String, Alarm>();
     }
 }

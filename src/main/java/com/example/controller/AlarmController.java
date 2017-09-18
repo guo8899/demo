@@ -106,6 +106,12 @@ public class AlarmController {
         alarmCenter.init();
     }
 
+    @RequestMapping("/setAlarmTemplate")
+    public void setAlarmTemplate(HttpServletRequest request, HttpServletResponse response) {
+        alarmCenter.setAlarmTemplate();
+    }
+
+
     public static void main(String[] args) throws Exception {
         SpringApplication.run(AlarmController.class, args);
     }
