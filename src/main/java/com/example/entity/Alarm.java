@@ -6,6 +6,7 @@ import net.sf.json.JSONArray;
  * Created by fzy on 2017/9/15.
  */
 public class Alarm extends AlarmTemplate {
+    private static final long serialVersionUID = -4877893573223903453L;
     /**
      * 告警编号
      */

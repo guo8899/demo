@@ -1,6 +1,7 @@
 package com.example.handle;
 
 import com.example.entity.Alarm;
+import com.example.entity.AlarmTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -17,16 +18,16 @@ public class AlarmCenter {
     /**
      *  alarmId, alarmTitle, alarmFormat
      */
-    private Map<String, Alarm> alarmTemplateMap = new HashMap<String, Alarm>();
+    private Map<String, AlarmTemplate> alarmTemplateMap = new HashMap<String, AlarmTemplate>();
 
     private Map<String, Integer> alarmCounter = new HashMap<String, Integer>();
     private Map<String, ArrayList<Alarm>> alarmMap = new HashMap<String, ArrayList<Alarm>>();
-/*
-    public Map<String, Alarm> getAlarmTemplateMap() {
+
+    public Map<String, AlarmTemplate> getAlarmTemplateMap() {
         return alarmTemplateMap;
     }
 
-    public void setAlarmTemplateMap(Map<String, Alarm> alarmTemplateMap) {
+    public void setAlarmTemplateMap(Map<String, AlarmTemplate> alarmTemplateMap) {
         this.alarmTemplateMap = alarmTemplateMap;
     }
 
@@ -45,7 +46,7 @@ public class AlarmCenter {
     public void setAlarmMap(Map<String, ArrayList<Alarm>> alarmMap) {
         this.alarmMap = alarmMap;
     }
-*/
+
 
     public Integer getAlarmCount(String alarmId) {
         return alarmCounter.get(alarmId);
@@ -73,7 +74,7 @@ public class AlarmCenter {
         alarmCounter.put(alarmId, count + 1);
     }
 
-    public Alarm getAlarmTemplate(String alarmId) {
+    public AlarmTemplate getAlarmTemplate(String alarmId) {
         return alarmTemplateMap.get(alarmId);
     }
 
@@ -84,6 +85,6 @@ public class AlarmCenter {
 
     public void setAlarmTemplate() {
         //set alarmTemplateMap 设置告警模板，从数据库或者配置或代码写死获取
-        //alarmTemplateMap = new HashMap<String, Alarm>();
+        alarmTemplateMap = new HashMap<String, AlarmTemplate>();
     }
 }

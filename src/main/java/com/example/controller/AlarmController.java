@@ -4,6 +4,7 @@ import com._21cn.framework.util.StringUtil;
 import com._21cn.framework.web.HttpRequestInfo;
 import com._21cn.open.common.util.AjaxResponseUtil;
 import com.example.entity.Alarm;
+import com.example.entity.AlarmTemplate;
 import com.example.handle.AlarmCenter;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -17,10 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -71,7 +69,7 @@ public class AlarmController {
         //log.info(jb);
 
         //发送: 短信微信邮件
-        //可能有过滤规则(不发送)
+        //可能有发送策略
         resultData.put("result", 10000);
         resultData.put("msg", "success");
         AjaxResponseUtil.returnData(response, "json", resultData);
@@ -86,14 +84,34 @@ public class AlarmController {
         alarmId = reqInfo.getParameter("alarmId");
 
         if (!StringUtil.isEmpty(alarmId)) {
-            Alarm alarm = alarmCenter.getAlarmTemplate(alarmId);
-            String alarmTitle = alarm.getAlarmTitle();
+            AlarmTemplate alarmTemplate = alarmCenter.getAlarmTemplate(alarmId);
+            String alarmTitle = alarmTemplate.getAlarmTitle();
             Integer alarmCount = alarmCenter.getAlarmCount(alarmId);
             Map<String, Object> alarmInfo = new HashMap<String, Object>();
             alarmInfo.put("alarmId", alarmId);
             alarmInfo.put("alarmTitle", alarmTitle);
             alarmInfo.put("alarmCount", alarmCount);
             alarms.add(alarmInfo);
+        }
+        else {
+            String showAll = reqInfo.getParameter("showAll");
+            Set<String> aIds = null;
+            if (StringUtil.isEmpty(showAll) || showAll.equals("1")) {
+                aIds = alarmCenter.getAlarmTemplateMap().keySet();
+            }
+            else {
+                aIds = alarmCenter.getAlarmMap().keySet();
+            }
+            for (String aId : aIds) {
+                AlarmTemplate alarmTemplate = alarmCenter.getAlarmTemplate(aId);
+                String alarmTitle = alarmTemplate.getAlarmTitle();
+                Integer alarmCount = alarmCenter.getAlarmCount(alarmId);
+                Map<String, Object> alarmInfo = new HashMap<String, Object>();
+                alarmInfo.put("alarmId", aId);
+                alarmInfo.put("alarmTitle", alarmTitle);
+                alarmInfo.put("alarmCount", alarmCount);
+                alarms.add(alarmInfo);
+            }
         }
         resultData.put("result", 10000);
         resultData.put("msg", "success");

@@ -4,6 +4,7 @@ package com.example.entity;
  * Created by fzy on 2017/9/18.
  */
 public class AlarmTemplate {
+    private static final long serialVersionUID = -4877893573223903453L;
     /**
      * 告警编号
      */
