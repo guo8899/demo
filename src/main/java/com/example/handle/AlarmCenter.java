@@ -77,7 +77,24 @@ public class AlarmCenter {
     public AlarmTemplate getAlarmTemplate(String alarmId) {
         return alarmTemplateMap.get(alarmId);
     }
-
+    public String getAlarmTitle(String alarmId) {
+        AlarmTemplate alarmTemplate = alarmTemplateMap.get(alarmId);
+        if (alarmTemplate != null) {
+            return alarmTemplate.getAlarmTitle();
+        }
+        else {
+            return null;
+        }
+    }
+    public String getAlarmFormat(String alarmId) {
+        AlarmTemplate alarmTemplate = alarmTemplateMap.get(alarmId);
+        if (alarmTemplate != null) {
+            return alarmTemplate.getAlarmFormat();
+        }
+        else {
+            return null;
+        }
+    }
     public void init() {
         alarmCounter = new HashMap<String, Integer>();
         alarmMap = new HashMap<String, ArrayList<Alarm>>();

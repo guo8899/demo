@@ -26,6 +26,7 @@
 		<json.version>2.3</json.version>
 		<cn21-framework.version>1.0.6</cn21-framework.version>
 		<cn21-zhptOpenCommon.version>1.2</cn21-zhptOpenCommon.version>
+		<commons-email.version>1.3.2</commons-email.version>
 	</properties>
 
 	<dependencies>
@@ -62,6 +63,24 @@
 			<groupId>21cn</groupId>
 			<artifactId>zhptOpenCommon</artifactId>
 			<version>${cn21-zhptOpenCommon.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>21cn</groupId>
+			<artifactId>wechat-api</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-email</artifactId>
+			<version>${commons-email.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>activation</artifactId>
+					<groupId>javax.activation</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 	</dependencies>

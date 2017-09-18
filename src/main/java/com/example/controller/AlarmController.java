@@ -6,8 +6,12 @@ import com._21cn.open.common.util.AjaxResponseUtil;
 import com.example.entity.Alarm;
 import com.example.entity.AlarmTemplate;
 import com.example.handle.AlarmCenter;
+import com.example.util.AlarmUtils;
+import com.example.util.NotifyUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -30,6 +34,8 @@ import java.util.*;
 @ComponentScan(basePackages = {"com.example"})      //扫描包路径
 
 public class AlarmController {
+    private static final Logger log = LoggerFactory.getLogger("notifyLogger");
+
     AlarmCenter alarmCenter;
     @Autowired
     public void setAlarmCenter(AlarmCenter alarmCenter) {
@@ -60,16 +66,24 @@ public class AlarmController {
         //统计，打日志
         alarmCenter.increaseAlarmCount(alarmId);
         Alarm alarm = new Alarm();
+        String alarmTitle = alarmCenter.getAlarmTitle(alarmId);
+        String alarmFormat = alarmCenter.getAlarmFormat(alarmId);
+        alarm.setAlarmTitle(alarmTitle);
+        //alarm.setAlarmFormat(alarmFormat);   //格式不写入日志中
         alarm.setAlarmId(alarmId);
         alarm.setAlarmVlaue(alarmValue);
         alarm.setAlarmThreshold(alarmThreshold);
         alarmCenter.addAlarm(alarm);
 
         JSONObject jb = JSONObject.fromObject(alarm);
-        //log.info(jb);
+        log.info(jb.toString());
 
-        //发送: 短信微信邮件
+        //发送: 短信/微信/邮件
         //可能有发送策略
+        alarm.setAlarmFormat(alarmFormat);   //发送需要指定格式
+        String notice = AlarmUtils.gererate(alarm);
+        NotifyUtils.sendWechatNotice("@all", notice);
+
         resultData.put("result", 10000);
         resultData.put("msg", "success");
         AjaxResponseUtil.returnData(response, "json", resultData);
@@ -103,9 +117,8 @@ public class AlarmController {
                 aIds = alarmCenter.getAlarmMap().keySet();
             }
             for (String aId : aIds) {
-                AlarmTemplate alarmTemplate = alarmCenter.getAlarmTemplate(aId);
-                String alarmTitle = alarmTemplate.getAlarmTitle();
-                Integer alarmCount = alarmCenter.getAlarmCount(alarmId);
+                String alarmTitle = alarmCenter.getAlarmTitle(aId);
+                Integer alarmCount = alarmCenter.getAlarmCount(aId);
                 Map<String, Object> alarmInfo = new HashMap<String, Object>();
                 alarmInfo.put("alarmId", aId);
                 alarmInfo.put("alarmTitle", alarmTitle);

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+	<property name="LOG_HOME" value="/data/jsp/alarm.e.189.cn/logs" />
+
+	<appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder charset="UTF-8"> 
+			<pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%file:%line] - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="error-appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/stderror.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder charset="UTF-8">
+			<pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%file:%line] - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="spring-appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/spring.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder charset="UTF-8">
+			<pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%file:%line] - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="db-appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/db.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder charset="UTF-8">
+			<pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%file:%line] - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="common-appender" class="ch.qos.logback.core.rolling.RollingFileAppender"> 
+	    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+	        <level>DEBUG</level>
+	    </filter>
+	    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/data-common.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>60</maxHistory>
+		</rollingPolicy>
+		<encoder charset="UTF-8">
+			<pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%file:%line] - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="thread-appender"  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/data-thread.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>60</maxHistory>
+		</rollingPolicy>
+		<encoder charset="UTF-8">
+			<pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%file:%line] - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="notify-appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/notify.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder charset="UTF-8">
+			<pattern>%msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 输出到控制台和文件，可定义更多的 Appender -->
+	<root level="ERROR">
+		<appender-ref ref="Console" />
+		<appender-ref ref="error-appender" />
+	</root>
+
+	<!-- mybatis相关错误日志 -->
+	<logger name="org.mybatis" level="ERROR">
+		<appender-ref ref="db-appender" />
+	</logger>
+	
+	<!-- spring 相关错误日志 -->
+	<logger name="org.springframework" level="ERROR">
+		<appender-ref ref="spring-appender" />
+	</logger>
+	
+	<!-- 以下data业务逻辑日志 -->
+	<logger name="com._21cn.open.common" level="DEBUG">
+	    <appender-ref ref="common-appender" />
+	</logger>
+
+	<logger name="org.springframework" level="ERROR">  
+        <appender-ref ref="spring-appender"/>  
+    </logger>
+
+	<logger name="com._21cn.open.data.thread" level="INFO">
+		<appender-ref ref="thread-appender"/>
+	</logger>
+
+
+	<logger name="notifyLogger" level="INFO" >
+		<appender-ref ref="notify-appender"/>
+	</logger>
+
+</configuration>
