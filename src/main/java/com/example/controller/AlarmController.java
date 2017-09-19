@@ -7,7 +7,6 @@ import com.example.entity.Alarm;
 import com.example.entity.AlarmTemplate;
 import com.example.handle.AlarmCenter;
 import com.example.util.AlarmUtils;
-import com.example.util.NotifyUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -19,6 +18,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +43,7 @@ public class AlarmController {
     }
 
     @RequestMapping("/raise")
+    @ResponseBody
     public void raiseAlarm(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
         //参数获取
         HttpRequestInfo reqInfo = new HttpRequestInfo(request);
@@ -56,7 +57,7 @@ public class AlarmController {
             alarmId = reqInfo.getParameter("alarmId");
             alarmValue = Double.parseDouble(reqInfo.getParameter("alarmValue"));
             alarmThreshold = Double.parseDouble(reqInfo.getParameter("alarmThreshold"));
-            String params = reqInfo.getParameter("params");
+            String params = reqInfo.getParameter("data");
             data = AlarmUtils.getMap(JSONArray.fromObject(params));
         }catch (Exception e) {
             e.printStackTrace();
@@ -85,14 +86,15 @@ public class AlarmController {
         alarm.setAlarmFormat(alarmFormat);   //发送需要指定格式
         String notice = AlarmUtils.gererate(alarm);
         String TAG = "2";                   //分组编号
-        NotifyUtils.sendWechatNotifyByTag(TAG, "@all", notice);
-
+//        NotifyUtils.sendWechatNotifyByTag(TAG, "@all", notice);
+        resultData.put("notice", notice);
         resultData.put("result", 10000);
         resultData.put("msg", "success");
         AjaxResponseUtil.returnData(response, "json", resultData);
     }
 
     @RequestMapping("/query")
+    @ResponseBody
     public void queryAlarm(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
         HttpRequestInfo reqInfo = new HttpRequestInfo(request);
         Map<String, Object> resultData = new HashMap<String, Object>();
@@ -136,15 +138,21 @@ public class AlarmController {
     }
 
     @RequestMapping("/init")
+    @ResponseBody
     public void init(HttpServletRequest request, HttpServletResponse response) {
         alarmCenter.init();
     }
 
     @RequestMapping("/setAlarmTemplate")
+    @ResponseBody
     public void setAlarmTemplate(HttpServletRequest request, HttpServletResponse response) {
         alarmCenter.setAlarmTemplate();
     }
-
+    @RequestMapping("/test")
+    @ResponseBody
+    public String test(HttpServletRequest request, HttpServletResponse response) {
+        return "ok";
+    }
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(AlarmController.class, args);
