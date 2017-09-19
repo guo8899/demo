@@ -82,7 +82,8 @@ public class AlarmController {
         //可能有发送策略
         alarm.setAlarmFormat(alarmFormat);   //发送需要指定格式
         String notice = AlarmUtils.gererate(alarm);
-        NotifyUtils.sendWechatNotice("@all", notice);
+        String TAG = "2";                   //分组编号
+        NotifyUtils.sendWechatNotifyByTag(TAG, "@all", notice);
 
         resultData.put("result", 10000);
         resultData.put("msg", "success");
