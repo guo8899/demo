@@ -3,9 +3,10 @@ package com.example.demo;
 import com.example.entity.Alarm;
 import com.example.entity.AlarmTemplate;
 import com.example.util.AlarmUtils;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootApplication
 public class DemoApplication {
@@ -38,8 +39,8 @@ public class DemoApplication {
 		/*
 		AlarmTemplate temp = AlarmUtils.createE189_PROFITRATEWARNING();
 		Alarm alarm = AlarmUtils.fromTemplate(temp);
-		alarm.setAlarmThreshold(0.80);
-		alarm.setAlarmVlaue(0.70);
+		alarm.setAlarmThreshold(0.90);
+		alarm.setAlarmVlaue(0.80);
 		String message = AlarmUtils.gererate(alarm);
 		System.out.println(message);
 		*/
@@ -48,17 +49,14 @@ public class DemoApplication {
 		Alarm alarm = AlarmUtils.fromTemplate(temp);
 		alarm.setAlarmThreshold(0.80);
 		alarm.setAlarmVlaue(0.70);
-		//Map<String, String> params = new HashMap<String, String>();
-		//params.put("")
-		JSONArray ja = new JSONArray();
-		ja.add(testJson("", ""));
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("supplier", "翼支付");
+		data.put("bizType", "全业务");
+		data.put("operator", "电信");
+		data.put("spec", "500M");
+		alarm.setData(data);
 		String message = AlarmUtils.gererate(alarm);
 		System.out.println(message);
 	}
 
-	static JSONObject testJson(String key, String value) {
-		JSONObject jb = new JSONObject();
-		jb.put("key", key);
-		return jb;
-	}
 }
