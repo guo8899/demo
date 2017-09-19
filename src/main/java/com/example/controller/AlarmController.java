@@ -50,13 +50,14 @@ public class AlarmController {
         String alarmId = null;
         Double alarmValue = null;
         Double alarmThreshold = null;
-        JSONArray data = null;
+        Map<String, Object> data = new HashMap<String, Object>();
+
         try {
             alarmId = reqInfo.getParameter("alarmId");
             alarmValue = Double.parseDouble(reqInfo.getParameter("alarmValue"));
             alarmThreshold = Double.parseDouble(reqInfo.getParameter("alarmThreshold"));
             String params = reqInfo.getParameter("params");
-            data = JSONArray.fromObject(params);
+            data = AlarmUtils.getMap(JSONArray.fromObject(params));
         }catch (Exception e) {
             e.printStackTrace();
             resultData.put("result", -10000);
@@ -73,6 +74,7 @@ public class AlarmController {
         alarm.setAlarmId(alarmId);
         alarm.setAlarmVlaue(alarmValue);
         alarm.setAlarmThreshold(alarmThreshold);
+        alarm.setData(data);
         alarmCenter.addAlarm(alarm);
 
         JSONObject jb = JSONObject.fromObject(alarm);

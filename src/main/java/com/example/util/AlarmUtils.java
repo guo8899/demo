@@ -2,6 +2,12 @@ package com.example.util;
 
 import com.example.entity.Alarm;
 import com.example.entity.AlarmTemplate;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by fzy on 2017/9/15.
@@ -34,5 +40,19 @@ public class AlarmUtils {
         String templateContent = alarm.getAlarmFormat();
         String message = TemplateUtils.generate(alarm, templateId, templateContent);
         return message;
+    }
+
+    public static Map<String, Object> getMap(JSONArray ja) {
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        if (null != ja && ja.size() > 0) {
+            Iterator<Object> it = ja.iterator();
+            while (it.hasNext()) {
+                JSONObject jb = (JSONObject) it.next();
+                String key = (String) jb.get("key");
+                String value = (String) jb.get("value");
+                parameters.put(key, value);
+            }
+        }
+        return parameters;
     }
 }

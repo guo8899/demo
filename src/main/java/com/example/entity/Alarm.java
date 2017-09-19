@@ -1,6 +1,6 @@
 package com.example.entity;
 
-import net.sf.json.JSONArray;
+import java.util.Map;
 
 /**
  * Created by fzy on 2017/9/15.
@@ -29,16 +29,20 @@ public class Alarm extends AlarmTemplate {
      */
     private Double alarmThreshold;
 
+    private Map<String, Object> data;
+
     /**
      * 可选属性，可配置
-     * data = JSONArray.fromObject(params);
+     * JSONArray.fromObject(params);
      * [
             {"key":"provinceCode", "value":"CN45"},
             {"key" :"channelCode", "value":"E_189"},
             {"key" :"businessType", "value":1}
         ]
+     *
+     * data: {"provinceCode":"CN45", "channelCode":"E_189", "businessType":1 }
      */
-    private JSONArray data;
+    //private JSONArray data;
 
     /*
     public String getAlarmId() {
@@ -80,6 +84,15 @@ public class Alarm extends AlarmTemplate {
         this.alarmThreshold = alarmThreshold;
     }
 
+    public Map<String, Object> getData() {
+        return data;
+    }
+
+    public void setData(Map<String, Object> data) {
+        this.data = data;
+    }
+
+    /*
     public JSONArray getData() {
         return data;
     }
@@ -92,4 +105,5 @@ public class Alarm extends AlarmTemplate {
     public void setDataByParams(String params) {
         this.setData(JSONArray.fromObject(params));
     }
+*/
 }
