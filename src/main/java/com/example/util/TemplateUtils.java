@@ -1,6 +1,5 @@
 package com.example.util;
 
-import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -14,13 +13,14 @@ import java.util.Map;
  * Created by fzy on 2017/9/19.
  */
 public class TemplateUtils {
-    public static String generate(Object object, String templateId, String templateContent) {
+    public static String generate(Configuration cfg, Object object, String templateId) {
+        /*
         Configuration cfg = new Configuration();
         StringTemplateLoader stringLoader = new StringTemplateLoader();
         //String templateContent="欢迎：${name}";
         stringLoader.putTemplate(templateId,templateContent);
         cfg.setTemplateLoader(stringLoader);
-
+        */
         try {
             Template template = cfg.getTemplate(templateId, "utf-8");
             Map root = new HashMap();

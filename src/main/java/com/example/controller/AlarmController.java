@@ -7,6 +7,8 @@ import com.example.entity.Alarm;
 import com.example.entity.AlarmTemplate;
 import com.example.handle.AlarmCenter;
 import com.example.util.AlarmUtils;
+import freemarker.cache.StringTemplateLoader;
+import freemarker.template.Configuration;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -35,6 +37,12 @@ import java.util.*;
 
 public class AlarmController {
     private static final Logger log = LoggerFactory.getLogger("notifyLogger");
+
+    Configuration cfg;
+    @Autowired
+    public void setCfg(Configuration cfg) {
+        this.cfg = cfg;
+    }
 
     AlarmCenter alarmCenter;
     @Autowired
@@ -84,7 +92,7 @@ public class AlarmController {
         //发送: 短信/微信/邮件
         //可能有发送策略
         alarm.setAlarmFormat(alarmFormat);   //发送需要指定格式
-        String notice = AlarmUtils.gererate(alarm);
+        String notice = AlarmUtils.gererate(cfg, alarm);
         String TAG = "2";                   //分组编号
 //        NotifyUtils.sendWechatNotifyByTag(TAG, "@all", notice);
         resultData.put("notice", notice);
@@ -145,9 +153,18 @@ public class AlarmController {
 
     @RequestMapping("/setAlarmTemplate")
     @ResponseBody
-    public void setAlarmTemplate(HttpServletRequest request, HttpServletResponse response) {
+    public String setAlarmTemplate(HttpServletRequest request, HttpServletResponse response) {
         alarmCenter.setAlarmTemplate();
+        Map<String, AlarmTemplate> alarmTemplateMap = alarmCenter.getAlarmTemplateMap();
+        StringTemplateLoader stringLoader = new StringTemplateLoader();
+        for (String alarmId : alarmTemplateMap.keySet()) {
+            AlarmTemplate alarm = alarmTemplateMap.get(alarmId);
+            stringLoader.putTemplate("template" + alarmId, alarm.getAlarmFormat());
+        }
+        cfg.setTemplateLoader(stringLoader);
+        return "ok";
     }
+
     @RequestMapping("/test")
     @ResponseBody
     public String test(HttpServletRequest request, HttpServletResponse response) {

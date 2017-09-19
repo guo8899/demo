@@ -55,8 +55,8 @@ public class DemoApplication {
 		data.put("operator", "电信");
 		data.put("spec", "500M");
 		alarm.setData(data);
-		String message = AlarmUtils.gererate(alarm);
-		System.out.println(message);
+		//String message = AlarmUtils.gererate(alarm);
+		//System.out.println(message);
 	}
 
 }

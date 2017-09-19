@@ -2,6 +2,7 @@ package com.example.util;
 
 import com.example.entity.Alarm;
 import com.example.entity.AlarmTemplate;
+import freemarker.template.Configuration;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -35,10 +36,10 @@ public class AlarmUtils {
         return alarm;
     }
 
-    public static String gererate(Alarm alarm) {
+    public static String gererate(Configuration cfg, Alarm alarm) {
         String templateId = "template" + alarm.getAlarmId();
         String templateContent = alarm.getAlarmFormat();
-        String message = TemplateUtils.generate(alarm, templateId, templateContent);
+        String message = TemplateUtils.generate(cfg, alarm, templateId);
         return message;
     }
 
