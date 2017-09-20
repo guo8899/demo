@@ -133,6 +133,9 @@ public class AlarmController {
             for (String aId : aIds) {
                 String alarmTitle = alarmCenter.getAlarmTitle(aId);
                 Integer alarmCount = alarmCenter.getAlarmCount(aId);
+                if (alarmCount == null) {
+                    alarmCount = 0;
+                }
                 Map<String, Object> alarmInfo = new HashMap<String, Object>();
                 alarmInfo.put("alarmId", aId);
                 alarmInfo.put("alarmTitle", alarmTitle);
