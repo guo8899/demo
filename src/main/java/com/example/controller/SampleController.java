@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/sample")
 @EnableAutoConfiguration
+
 public class SampleController {
 
     @RequestMapping("/home")
@@ -18,7 +19,6 @@ public class SampleController {
     }
 
     public static void main(String[] args) throws Exception {
-        //SpringApplication.run(SampleController.class, args);
-        SpringApplication.run(AlarmController.class, args);
+        SpringApplication.run(SampleController.class, args);
     }
 }
