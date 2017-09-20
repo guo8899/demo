@@ -73,6 +73,7 @@ public class AlarmController {
             resultData.put("result", -10000);
             resultData.put("msg", "fail");
             AjaxResponseUtil.returnData(response, "json", resultData);
+            return;
         }
         //统计，打日志
         alarmCenter.increaseAlarmCount(alarmId);
