@@ -65,7 +65,9 @@ public class AlarmController {
             alarmValue = Double.parseDouble(reqInfo.getParameter("alarmValue"));
             alarmThreshold = Double.parseDouble(reqInfo.getParameter("alarmThreshold"));
             String params = reqInfo.getParameter("data");
-            data = AlarmUtils.getMap(JSONArray.fromObject(params));
+            if(params != null) {
+                data = AlarmUtils.getMap(JSONArray.fromObject(params));
+            }
         }catch (Exception e) {
             e.printStackTrace();
             resultData.put("result", -10000);
