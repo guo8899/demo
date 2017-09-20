@@ -2,7 +2,9 @@ package com.example.demo;
 
 import com.example.entity.Alarm;
 import com.example.entity.AlarmTemplate;
+import com.example.handle.AlarmCenter;
 import com.example.util.AlarmUtils;
+import freemarker.template.Configuration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.HashMap;
@@ -55,8 +57,11 @@ public class DemoApplication {
 		data.put("operator", "电信");
 		data.put("spec", "500M");
 		alarm.setData(data);
-		//String message = AlarmUtils.gererate(alarm);
-		//System.out.println(message);
+		AlarmCenter alarmCenter = new AlarmCenter();
+		Configuration cfg = new Configuration();
+		AlarmUtils.setAlarmTemplate(alarmCenter, cfg);
+		String message = AlarmUtils.gererate(cfg, alarm);
+		System.out.println(message);
 	}
 
 }

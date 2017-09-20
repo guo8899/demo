@@ -2,6 +2,8 @@ package com.example.util;
 
 import com.example.entity.Alarm;
 import com.example.entity.AlarmTemplate;
+import com.example.handle.AlarmCenter;
+import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -55,5 +57,16 @@ public class AlarmUtils {
             }
         }
         return parameters;
+    }
+
+    public static void setAlarmTemplate(AlarmCenter alarmCenter, Configuration cfg) {
+        alarmCenter.setAlarmTemplate();
+        Map<String, AlarmTemplate> alarmTemplateMap = alarmCenter.getAlarmTemplateMap();
+        StringTemplateLoader stringLoader = new StringTemplateLoader();
+        for (String alarmId : alarmTemplateMap.keySet()) {
+            AlarmTemplate alarm = alarmTemplateMap.get(alarmId);
+            stringLoader.putTemplate("template" + alarmId, alarm.getAlarmFormat());
+        }
+        cfg.setTemplateLoader(stringLoader);
     }
 }
