@@ -30,7 +30,23 @@ public class AlarmUtilsTest {
     }
 */
     @Test
-    public void gererate() throws Exception {
+    public void gererate002() throws Exception {
+        AlarmTemplate temp = AlarmUtils.createE189_PROFITRATEWARNING();
+        Alarm alarm = AlarmUtils.fromTemplate(temp);
+        alarm.setAlarmThreshold(0.80);
+        alarm.setAlarmVlaue(0.70);
+        Map<String, Object> data = new HashMap<String, Object>();
+        alarm.setData(data);
+
+        AlarmCenter alarmCenter = new AlarmCenter();
+        Configuration cfg = new Configuration();
+        AlarmUtils.setAlarmTemplate(alarmCenter, cfg);
+        String message = AlarmUtils.gererate(cfg, alarm);
+        System.out.println(message);
+    }
+
+    @Test
+    public void gererate001() throws Exception {
         AlarmTemplate temp = AlarmUtils.createINTENET_WARING();
         Alarm alarm = AlarmUtils.fromTemplate(temp);
         alarm.setAlarmThreshold(0.80);
