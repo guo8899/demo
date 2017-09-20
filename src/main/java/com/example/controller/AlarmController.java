@@ -65,7 +65,7 @@ public class AlarmController {
             alarmValue = Double.parseDouble(reqInfo.getParameter("alarmValue"));
             alarmThreshold = Double.parseDouble(reqInfo.getParameter("alarmThreshold"));
             String params = reqInfo.getParameter("data");
-            if(params != null) {
+            if(!StringUtil.isEmpty(params)) {
                 data = AlarmUtils.getMap(JSONArray.fromObject(params));
             }
         }catch (Exception e) {
@@ -148,8 +148,9 @@ public class AlarmController {
 
     @RequestMapping("/init")
     @ResponseBody
-    public void init(HttpServletRequest request, HttpServletResponse response) {
+    public String init(HttpServletRequest request, HttpServletResponse response) {
         alarmCenter.init();
+        return "ok";
     }
 
     @RequestMapping("/setAlarmTemplate")
