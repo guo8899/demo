@@ -34,7 +34,7 @@ import java.util.*;
 @Controller
 @RequestMapping("/alarm")
 @EnableAutoConfiguration
-@ComponentScan(basePackages = {"com.example"})      //扫描包路径
+@ComponentScan(basePackages = {"com.example", "com.example.util"})      //扫描包路径
 @SpringBootApplication
 
 public class AlarmController {

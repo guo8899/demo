@@ -1,7 +1,6 @@
 package com.example.util;
 
 import com._21cn.open.common.util.StringUtil;
-import com._21cn.open.common.util.WebUtil;
 import com._21cn.wechat.entity.AccessToken;
 import com._21cn.wechat.util.WechatCorpApi;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
@@ -25,9 +24,14 @@ public class NotifyUtils {
     private static final String corpId = "wx115e4f4ad173e203"; //微信企业号appkey
     private static final String secret = "0p3wq9WQpYlcK71x2qEVJI2R6X_txX-sw28I-svx72w2jt-Lii53kIsrv1iBGaMe"; //微信企业号秘钥
     //邮件参数
-    private static String mailAccount = WebUtil.getConfigValue("openstatistic.properties", "sendMailAccount");
-    private static String mailPassword = WebUtil.getConfigValue("openstatistic.properties", "sendMailPassword");
-    private static String mailHostName = WebUtil.getConfigValue("openstatistic.properties", "mailHostName");
+    //private static String mailAccount = WebUtil.getConfigValue("openstatistic.properties", "sendMailAccount");
+    //private static String mailPassword = WebUtil.getConfigValue("openstatistic.properties", "sendMailPassword");
+    //private static String mailHostName = WebUtil.getConfigValue("openstatistic.properties", "mailHostName");
+
+    private static String mailAccount = "fengzhy";
+    private static String mailPassword = "*******";
+    private static String mailHostName = "corp.21cn.com";
+
 
     private static final Logger log = LoggerFactory.getLogger(NotifyUtils.class);
     /**
