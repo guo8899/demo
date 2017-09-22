@@ -179,4 +179,13 @@ public class AlarmController {
     public static void main(String[] args) throws Exception {
         SpringApplication.run(AlarmController.class, args);
     }
+
+    /**
+     * 定时任务，2分钟触发一次，收集alarmId=xxx的"连续告警"并进行整合
+     * 用变量保存维护上次的计数器count0，并和本次计数器count = alarmCenter.getAlarmCount(xxx)比较
+     * 若count0 == count，把收集到的告警整合成一条告警
+     * 若count0 <> count，则继续收集
+     * 队列模式：收集完就立即发送
+     * 数组模式：记录每次收集的下标
+     */
 }
