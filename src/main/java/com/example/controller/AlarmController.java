@@ -7,6 +7,7 @@ import com.example.entity.Alarm;
 import com.example.entity.AlarmTemplate;
 import com.example.handle.AlarmCenter;
 import com.example.util.AlarmUtils;
+import com.example.util.NotifyUtils;
 import freemarker.template.Configuration;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -33,6 +35,7 @@ import java.util.*;
 @RequestMapping("/alarm")
 @EnableAutoConfiguration
 @ComponentScan(basePackages = {"com.example"})      //扫描包路径
+@SpringBootApplication
 
 public class AlarmController {
     private static final Logger log = LoggerFactory.getLogger("notifyLogger");
@@ -96,7 +99,7 @@ public class AlarmController {
         alarm.setAlarmFormat(alarmFormat);   //发送需要指定格式
         String notice = AlarmUtils.gererate(cfg, alarm);
         String TAG = "2";                   //分组编号
-//        NotifyUtils.sendWechatNotifyByTag(TAG, "@all", notice);
+        NotifyUtils.sendWechatNotifyByTag(TAG, "@all", notice);
         resultData.put("notice", notice);
         resultData.put("result", 10000);
         resultData.put("msg", "success");
