@@ -2,7 +2,7 @@ package com.example.util;
 
 import com.example.entity.Alarm;
 import com.example.entity.AlarmTemplate;
-import com.example.handle.AlarmCenter;
+import com.example.handle.AlarmOldCenter;
 import freemarker.template.Configuration;
 import net.sf.json.JSONObject;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class AlarmUtilsTest {
         Map<String, Object> data = new HashMap<String, Object>();
         alarm.setData(data);
 
-        AlarmCenter alarmCenter = new AlarmCenter();
+        AlarmOldCenter alarmCenter = new AlarmOldCenter();
         Configuration cfg = new Configuration();
         AlarmUtils.setAlarmTemplate(alarmCenter, cfg);
         String message = AlarmUtils.gererate(cfg, alarm);
@@ -58,7 +58,7 @@ public class AlarmUtilsTest {
         data.put("spec", "500M");
         alarm.setData(data);
 
-        AlarmCenter alarmCenter = new AlarmCenter();
+        AlarmOldCenter alarmCenter = new AlarmOldCenter();
         Configuration cfg = new Configuration();
         AlarmUtils.setAlarmTemplate(alarmCenter, cfg);
         String message = AlarmUtils.gererate(cfg, alarm);

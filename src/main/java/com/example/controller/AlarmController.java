@@ -5,9 +5,9 @@ import com._21cn.framework.web.HttpRequestInfo;
 import com._21cn.open.common.util.AjaxResponseUtil;
 import com.example.entity.Alarm;
 import com.example.entity.AlarmTemplate;
-import com.example.handle.AlarmCenter;
+import com.example.service.IAlarmCenter;
+import com.example.service.IAlarmFactory;
 import com.example.util.AlarmUtils;
-import com.example.util.NotifyUtils;
 import freemarker.template.Configuration;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -25,7 +25,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -46,10 +49,16 @@ public class AlarmController {
         this.cfg = cfg;
     }
 
-    AlarmCenter alarmCenter;
+    IAlarmCenter alarmCenter;
     @Autowired
-    public void setAlarmCenter(AlarmCenter alarmCenter) {
+    public void setAlarmCenter(IAlarmCenter alarmCenter) {
         this.alarmCenter = alarmCenter;
+    }
+
+    @Autowired
+    IAlarmFactory alarmFactory;
+    public void setAlarmFactory(IAlarmFactory alarmFactory) {
+        this.alarmFactory = alarmFactory;
     }
 
     @RequestMapping("/raise")
@@ -78,28 +87,23 @@ public class AlarmController {
             AjaxResponseUtil.returnData(response, "json", resultData);
             return;
         }
+        IAlarmCenter alarmCenter = alarmFactory.getAlarmCenter(alarmId);
         //统计，打日志
-        alarmCenter.increaseAlarmCount(alarmId);
-        Alarm alarm = new Alarm();
-        String alarmTitle = alarmCenter.getAlarmTitle(alarmId);
-        String alarmFormat = alarmCenter.getAlarmFormat(alarmId);
-        alarm.setAlarmTitle(alarmTitle);
-        //alarm.setAlarmFormat(alarmFormat);   //格式不写入日志中
+        Alarm alarm = alarmCenter.create();
         alarm.setAlarmId(alarmId);
         alarm.setAlarmVlaue(alarmValue);
         alarm.setAlarmThreshold(alarmThreshold);
         alarm.setData(data);
-        alarmCenter.addAlarm(alarm);
+        alarmCenter.add(alarm);
 
         JSONObject jb = JSONObject.fromObject(alarm);
         log.info(jb.toString());
 
         //发送: 短信/微信/邮件
         //可能有发送策略
-        alarm.setAlarmFormat(alarmFormat);   //发送需要指定格式
-        String notice = AlarmUtils.gererate(cfg, alarm);
+        String notice = alarmCenter.generate(alarm);
         String TAG = "2";                   //分组编号
-        NotifyUtils.sendWechatNotifyByTag(TAG, "@all", notice);
+        //NotifyUtils.sendWechatNotifyByTag(TAG, "@all", notice);
         resultData.put("notice", notice);
         resultData.put("result", 10000);
         resultData.put("msg", "success");
@@ -116,38 +120,37 @@ public class AlarmController {
         alarmId = reqInfo.getParameter("alarmId");
 
         if (!StringUtil.isEmpty(alarmId)) {
-            AlarmTemplate alarmTemplate = alarmCenter.getAlarmTemplate(alarmId);
-            String alarmTitle = alarmTemplate.getAlarmTitle();
-            Integer alarmCount = alarmCenter.getAlarmCount(alarmId);
+            IAlarmCenter alarmCenter = alarmFactory.getAlarmCenter(alarmId);
+            Integer alarmCount = alarmCenter.getCounter();
             if (alarmCount == null) {
                 alarmCount = 0;
             }
             Map<String, Object> alarmInfo = new HashMap<String, Object>();
             alarmInfo.put("alarmId", alarmId);
-            alarmInfo.put("alarmTitle", alarmTitle);
+            AlarmTemplate atl = alarmCenter.getAlarmTemplate();
+            if(atl != null) {
+                alarmInfo.put("alarmTitle", atl.getAlarmTitle());
+            }
             alarmInfo.put("alarmCount", alarmCount);
             alarms.add(alarmInfo);
         }
         else {
             String showAll = reqInfo.getParameter("showAll");
-            Set<String> aIds = null;
-            if (StringUtil.isEmpty(showAll) || showAll.equals("1")) {
-                aIds = alarmCenter.getAlarmTemplateMap().keySet();
-            }
-            else {
-                aIds = alarmCenter.getAlarmMap().keySet();
-            }
-            for (String aId : aIds) {
-                String alarmTitle = alarmCenter.getAlarmTitle(aId);
-                Integer alarmCount = alarmCenter.getAlarmCount(aId);
-                if (alarmCount == null) {
-                    alarmCount = 0;
+            List<IAlarmCenter> alarmCenters = alarmFactory.getAlarmCenters();
+            for(IAlarmCenter alarmCenter : alarmCenters) {
+                AlarmTemplate alarmTemplate = alarmCenter.getAlarmTemplate();
+                String aId = alarmTemplate.getAlarmId();
+                String aTitle = alarmTemplate.getAlarmTitle();
+                Integer alarmCount = alarmCenter.getCounter();
+                if (!StringUtil.isEmpty(showAll) && !showAll.equals("1") && alarmCount == 0) {
+                    continue;
+                }else {
+                    Map<String, Object> alarmInfo = new HashMap<String, Object>();
+                    alarmInfo.put("alarmId", aId);
+                    alarmInfo.put("alarmTitle", aTitle);
+                    alarmInfo.put("alarmCount", alarmCount);
+                    alarms.add(alarmInfo);
                 }
-                Map<String, Object> alarmInfo = new HashMap<String, Object>();
-                alarmInfo.put("alarmId", aId);
-                alarmInfo.put("alarmTitle", alarmTitle);
-                alarmInfo.put("alarmCount", alarmCount);
-                alarms.add(alarmInfo);
             }
         }
         resultData.put("result", 10000);
@@ -156,6 +159,7 @@ public class AlarmController {
         AjaxResponseUtil.returnData(response, "json", resultData);
     }
 
+    //每天0点执行
     @RequestMapping("/init")
     @ResponseBody
     public String init(HttpServletRequest request, HttpServletResponse response) {
@@ -163,10 +167,56 @@ public class AlarmController {
         return "ok";
     }
 
+    /*
+    //App启动时执行
     @RequestMapping("/setAlarmTemplate")
     @ResponseBody
     public String setAlarmTemplate(HttpServletRequest request, HttpServletResponse response) {
-        AlarmUtils.setAlarmTemplate(alarmCenter, cfg);
+        AlarmUtils.setAlarmTemplate(alarmFa, cfg);
+        return "ok";
+    }
+    */
+
+    /**
+     * @Scheduled(fixedRate=120000)
+     * 定时任务，2分钟触发一次，收集alarmId=xxx的"连续告警"并进行整合
+     * 用变量保存维护上次的计数器count0，并和本次计数器count = alarmCenter.getAlarmCount(xxx)比较
+     * 若count0 == count，把收集到的告警整合成一条告警, 发送
+     * 若count0 <> count，则继续收集
+     * 队列模式：收集完就立即发送
+     * 数组模式：记录每次收集的下标
+     */
+    @RequestMapping("/merge")
+    @ResponseBody
+    public String mergeAlarm(HttpServletRequest request, HttpServletResponse response) {
+        List<IAlarmCenter> alarmCenters = alarmFactory.getAlarmCenters();
+        for(IAlarmCenter alarmCenter : alarmCenters) {
+            alarmCenter.merge();
+        }
+        return "ok";
+    }
+
+    /**
+     * 定时发送
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("/send")
+    @ResponseBody
+    public String send(HttpServletRequest request, HttpServletResponse response) {
+        HttpRequestInfo reqInfo = new HttpRequestInfo(request);
+        String alarmId = null;
+        alarmId = reqInfo.getParameter("alarmId");
+        if (!StringUtil.isEmpty(alarmId)) {
+            IAlarmCenter alarmCenter = alarmFactory.getAlarmCenter(alarmId);
+            alarmCenter.send();
+        }else{
+            List<IAlarmCenter> alarmCenters = alarmFactory.getAlarmCenters();
+            for(IAlarmCenter alarmCenter : alarmCenters) {
+                alarmCenter.send();
+            }
+        }
         return "ok";
     }
 
@@ -180,12 +230,4 @@ public class AlarmController {
         SpringApplication.run(AlarmController.class, args);
     }
 
-    /**
-     * 定时任务，2分钟触发一次，收集alarmId=xxx的"连续告警"并进行整合
-     * 用变量保存维护上次的计数器count0，并和本次计数器count = alarmCenter.getAlarmCount(xxx)比较
-     * 若count0 == count，把收集到的告警整合成一条告警
-     * 若count0 <> count，则继续收集
-     * 队列模式：收集完就立即发送
-     * 数组模式：记录每次收集的下标
-     */
 }

@@ -42,4 +42,11 @@ public class AlarmTemplate {
     public void setAlarmFormat(String alarmFormat) {
         this.alarmFormat = alarmFormat;
     }
+
+    public AlarmTemplate(String alarmId, String alarmFormat, String alarmTitle) {
+        this.alarmId = alarmId;
+        this.alarmFormat = alarmFormat;
+        this.alarmTitle = alarmTitle;
+    }
+    public AlarmTemplate() {}
 }
