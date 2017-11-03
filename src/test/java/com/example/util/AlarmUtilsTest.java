@@ -1,15 +1,8 @@
 package com.example.util;
 
-import com.example.entity.Alarm;
-import com.example.entity.AlarmTemplate;
-import com.example.handle.AlarmOldCenter;
-import freemarker.template.Configuration;
 import net.sf.json.JSONObject;
 import org.junit.Test;
 import org.springframework.context.annotation.ComponentScan;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by fzy on 2017/9/20.
@@ -29,6 +22,7 @@ public class AlarmUtilsTest {
         this.alarmCenter = alarmCenter;
     }
 */
+    /*
     @Test
     public void gererate002() throws Exception {
         AlarmTemplate temp = AlarmUtils.createE189_PROFITRATEWARNING();
@@ -64,6 +58,7 @@ public class AlarmUtilsTest {
         String message = AlarmUtils.gererate(cfg, alarm);
         System.out.println(message);
     }
+    */
 
     @Test
     public void jsonTest() throws Exception {
