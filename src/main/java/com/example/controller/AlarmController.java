@@ -121,7 +121,7 @@ public class AlarmController {
 
         if (!StringUtil.isEmpty(alarmId)) {
             IAlarmCenter alarmCenter = alarmFactory.getAlarmCenter(alarmId);
-            Integer alarmCount = alarmCenter.getCounter();
+            Integer alarmCount = alarmCenter.getTotalCount();
             if (alarmCount == null) {
                 alarmCount = 0;
             }
@@ -141,7 +141,7 @@ public class AlarmController {
                 AlarmTemplate alarmTemplate = alarmCenter.getAlarmTemplate();
                 String aId = alarmTemplate.getAlarmId();
                 String aTitle = alarmTemplate.getAlarmTitle();
-                Integer alarmCount = alarmCenter.getCounter();
+                Integer alarmCount = alarmCenter.getTotalCount();
                 if (!StringUtil.isEmpty(showAll) && !showAll.equals("1") && alarmCount == 0) {
                     continue;
                 }else {

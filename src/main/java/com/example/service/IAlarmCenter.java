@@ -14,7 +14,8 @@ public abstract class IAlarmCenter {
     protected AlarmTemplate alarmTemplate;
     protected List<Alarm> alarms;
     protected int lastIndex = 0;
-    protected int counter = 0;
+    protected int totalCount = 0;
+    protected int sendCount = 0;
     protected Configuration cfg;
 
     public abstract void add(Alarm alarm);
@@ -27,7 +28,9 @@ public abstract class IAlarmCenter {
 
     public abstract void init();
 
-    public abstract int getCounter();
+    public abstract int getTotalCount();
+
+    public abstract int getSendCount();
 
     public abstract void send();
 
@@ -64,5 +67,6 @@ public abstract class IAlarmCenter {
     public void setLastIndex(int lastIndex) {
         this.lastIndex = lastIndex;
     }
+
 
 }

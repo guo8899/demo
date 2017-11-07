@@ -14,21 +14,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by fzy on 2017/9/15.
+ * Created by fzy on 2017/11/7.
  */
-@Component("e189ProfitRateWaringCenter")
-public class E189ProfitRateWaringCenter extends IAlarmCenter {
+@Component("intenetWarningCenter")
+public class IntenetWarningCenter extends IAlarmCenter {
     //protected String alarmId;
     //protected AlarmTemplate alarmTemplate;
     //protected int lastIndex = 0;
-    protected String alarmId = "001";
+    protected String alarmId = "002";
 
     protected List<Alarm> alarms = new ArrayList<Alarm>();
     protected AlarmTemplate alarmTemplate = new AlarmTemplate(
-            ConstantUtils.E189_PROFITRATEWARNING_ID,
-            ConstantUtils.E189_PROFITRATEWARNING_TITLE,
-            ConstantUtils.E189_PROFITRATEWARNING_FORMAT
-            );
+            ConstantUtils.INTENET_WARING_ID,
+            ConstantUtils.INTENET_WARING_TITLE,
+            ConstantUtils.INTENET_WARING_FORMAT
+    );
 
     protected Configuration cfg = Configuration.getDefaultConfiguration();
     //init

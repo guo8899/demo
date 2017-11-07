@@ -21,4 +21,9 @@ public class ConstantUtils {
             + "业         务：${object.data.bizType} \n"
             + "运   营  商:${object.data.operator} \n"
             + "规         格:${object.data.spec} \n";
+
+    public static final String DEFAULT_WARING_ID = "000";
+    public static final String DEFAULT_WARING_TITLE = "(仅供测试)告警";
+    public static final String DEFAULT_WARING_FORMAT = ""
+            + "---${object.alarmTitle}---\n";
 }
