@@ -36,37 +36,15 @@ public abstract class IAlarmCenter {
 
     public abstract void send(Alarm alarm);
 
-    public String getAlarmId() {
-        return alarmId;
-    }
+    public abstract String getAlarmId();
 
-    public void setAlarmId(String alarmId) {
-        this.alarmId = alarmId;
-    }
+    public abstract void setAlarmId(String alarmId);
 
-    public AlarmTemplate getAlarmTemplate() {
-        return alarmTemplate;
-    }
+    public abstract AlarmTemplate getAlarmTemplate();
 
-    public void setAlarmTemplate(AlarmTemplate alarmTemplate) {
-        this.alarmTemplate = alarmTemplate;
-    }
+    public abstract void setAlarmTemplate(AlarmTemplate alarmTemplate);
 
-    public List<Alarm> getAlarms() {
-        return alarms;
-    }
-
-    public void setAlarms(List<Alarm> alarms) {
-        this.alarms = alarms;
-    }
-
-    public int getLastIndex() {
-        return lastIndex;
-    }
-
-    public void setLastIndex(int lastIndex) {
-        this.lastIndex = lastIndex;
-    }
+    public abstract List<Alarm> getAlarms();
 
 
 }

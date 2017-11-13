@@ -31,12 +31,6 @@ public class E189ProfitRateWaringCenter extends IAlarmCenter {
             );
 
     protected Configuration cfg = Configuration.getDefaultConfiguration();
-    //init
-    {
-        StringTemplateLoader stringLoader = new StringTemplateLoader();
-        stringLoader.putTemplate("template" + alarmId, alarmTemplate.getAlarmFormat());
-        cfg.setTemplateLoader(stringLoader);
-    }
 
     @Override
     public void add(Alarm alarm) {
@@ -81,6 +75,10 @@ public class E189ProfitRateWaringCenter extends IAlarmCenter {
         alarms = new ArrayList<Alarm>();
         lastIndex = 0;
         totalCount = 0;
+
+        StringTemplateLoader stringLoader = new StringTemplateLoader();
+        stringLoader.putTemplate("template" + alarmId, alarmTemplate.getAlarmFormat());
+        cfg.setTemplateLoader(stringLoader);
     }
 
     @Override
@@ -108,4 +106,28 @@ public class E189ProfitRateWaringCenter extends IAlarmCenter {
         sendCount++;
     }
 
+    @Override
+    public String getAlarmId() {
+        return alarmId;
+    }
+
+    @Override
+    public AlarmTemplate getAlarmTemplate() {
+        return alarmTemplate;
+    }
+
+    @Override
+    public List<Alarm> getAlarms() {
+        return alarms;
+    }
+
+    @Override
+    public void setAlarmId(String alarmId) {
+        this.alarmId = alarmId;
+    }
+
+    @Override
+    public void setAlarmTemplate(AlarmTemplate alarmTemplate) {
+        this.alarmTemplate = alarmTemplate;
+    }
 }

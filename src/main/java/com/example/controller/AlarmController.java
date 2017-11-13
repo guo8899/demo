@@ -6,7 +6,7 @@ import com._21cn.open.common.util.AjaxResponseUtil;
 import com.example.entity.Alarm;
 import com.example.entity.AlarmTemplate;
 import com.example.service.IAlarmCenter;
-import com.example.service.IAlarmFactory;
+import com.example.service.factoryimpl.AlarmFactory;
 import com.example.util.AlarmUtils;
 import freemarker.template.Configuration;
 import net.sf.json.JSONArray;
@@ -49,15 +49,17 @@ public class AlarmController {
         this.cfg = cfg;
     }
 
+    /*
     IAlarmCenter alarmCenter;
     @Autowired
     public void setAlarmCenter(IAlarmCenter alarmCenter) {
         this.alarmCenter = alarmCenter;
     }
+    */
 
     @Autowired
-    IAlarmFactory alarmFactory;
-    public void setAlarmFactory(IAlarmFactory alarmFactory) {
+    AlarmFactory alarmFactory;
+    public void setAlarmFactory(AlarmFactory alarmFactory) {
         this.alarmFactory = alarmFactory;
     }
 
@@ -163,7 +165,11 @@ public class AlarmController {
     @RequestMapping("/init")
     @ResponseBody
     public String init(HttpServletRequest request, HttpServletResponse response) {
-        alarmCenter.init();
+        alarmFactory.init();
+        List<IAlarmCenter> alarmCenters = alarmFactory.getAlarmCenters();
+        for(IAlarmCenter alarmCenter : alarmCenters) {
+            alarmCenter.init();
+        }
         return "ok";
     }
 

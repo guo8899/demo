@@ -2,6 +2,7 @@ package com.example.service.factoryimpl;
 
 import com.example.service.IAlarmCenter;
 import com.example.service.IAlarmFactory;
+import com.example.service.impl.E189ProfitRateWaringCenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +16,9 @@ import java.util.Map;
  */
 @Component
 public class AlarmFactory implements IAlarmFactory {
-    IAlarmCenter e189ProfitRateWaringCenter;
+    E189ProfitRateWaringCenter e189ProfitRateWaringCenter;
     @Autowired
-    public void setE189ProfitRateWaringCenter(IAlarmCenter e189ProfitRateWaringCenter) {
+    public void setE189ProfitRateWaringCenter(E189ProfitRateWaringCenter e189ProfitRateWaringCenter) {
         this.e189ProfitRateWaringCenter = e189ProfitRateWaringCenter;
     }
 
@@ -37,4 +38,6 @@ public class AlarmFactory implements IAlarmFactory {
     public void init() {
         alarmCenterMap.put(e189ProfitRateWaringCenter.getAlarmId(), e189ProfitRateWaringCenter);
     }
+
+
 }

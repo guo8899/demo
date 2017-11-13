@@ -108,4 +108,29 @@ public class IntenetWarningCenter extends IAlarmCenter {
         sendCount++;
     }
 
+    @Override
+    public String getAlarmId() {
+        return alarmId;
+    }
+
+    @Override
+    public AlarmTemplate getAlarmTemplate() {
+        return alarmTemplate;
+    }
+
+    @Override
+    public List<Alarm> getAlarms() {
+        return alarms;
+    }
+
+    @Override
+    public void setAlarmId(String alarmId) {
+        this.alarmId = alarmId;
+    }
+
+    @Override
+    public void setAlarmTemplate(AlarmTemplate alarmTemplate) {
+        this.alarmTemplate = alarmTemplate;
+    }
+
 }
