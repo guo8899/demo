@@ -43,7 +43,7 @@ public class AlarmTemplate {
         this.alarmFormat = alarmFormat;
     }
 
-    public AlarmTemplate(String alarmId, String alarmFormat, String alarmTitle) {
+    public AlarmTemplate(String alarmId, String alarmTitle, String alarmFormat) {
         this.alarmId = alarmId;
         this.alarmFormat = alarmFormat;
         this.alarmTitle = alarmTitle;

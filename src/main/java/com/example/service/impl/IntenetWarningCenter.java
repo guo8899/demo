@@ -21,7 +21,7 @@ public class IntenetWarningCenter extends IAlarmCenter {
     //protected String alarmId;
     //protected AlarmTemplate alarmTemplate;
     //protected int lastIndex = 0;
-    protected String alarmId = "002";
+    protected String alarmId = ConstantUtils.INTENET_WARING_ID;
 
     protected List<Alarm> alarms = new ArrayList<Alarm>();
     protected AlarmTemplate alarmTemplate = new AlarmTemplate(
@@ -30,13 +30,7 @@ public class IntenetWarningCenter extends IAlarmCenter {
             ConstantUtils.INTENET_WARING_FORMAT
     );
 
-    protected Configuration cfg = Configuration.getDefaultConfiguration();
-    //init
-    {
-        StringTemplateLoader stringLoader = new StringTemplateLoader();
-        stringLoader.putTemplate("template" + alarmId, alarmTemplate.getAlarmFormat());
-        cfg.setTemplateLoader(stringLoader);
-    }
+    protected Configuration cfg = new Configuration();
 
     @Override
     public void add(Alarm alarm) {
@@ -81,6 +75,10 @@ public class IntenetWarningCenter extends IAlarmCenter {
         alarms = new ArrayList<Alarm>();
         lastIndex = 0;
         totalCount = 0;
+
+        StringTemplateLoader stringLoader = new StringTemplateLoader();
+        stringLoader.putTemplate("template" + alarmId, alarmTemplate.getAlarmFormat());
+        cfg.setTemplateLoader(stringLoader);
     }
 
     @Override

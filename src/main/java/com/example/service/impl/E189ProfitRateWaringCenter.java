@@ -21,7 +21,7 @@ public class E189ProfitRateWaringCenter extends IAlarmCenter {
     //protected String alarmId;
     //protected AlarmTemplate alarmTemplate;
     //protected int lastIndex = 0;
-    protected String alarmId = "001";
+    protected String alarmId = ConstantUtils.E189_PROFITRATEWARNING_ID;
 
     protected List<Alarm> alarms = new ArrayList<Alarm>();
     protected AlarmTemplate alarmTemplate = new AlarmTemplate(
@@ -30,7 +30,7 @@ public class E189ProfitRateWaringCenter extends IAlarmCenter {
             ConstantUtils.E189_PROFITRATEWARNING_FORMAT
             );
 
-    protected Configuration cfg = Configuration.getDefaultConfiguration();
+    protected Configuration cfg = new Configuration();
 
     @Override
     public void add(Alarm alarm) {
