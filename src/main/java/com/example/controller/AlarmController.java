@@ -8,6 +8,7 @@ import com.example.entity.AlarmTemplate;
 import com.example.service.IAlarmCenter;
 import com.example.service.factoryimpl.AlarmFactory;
 import com.example.util.AlarmUtils;
+import com.example.util.NotifyUtils;
 import freemarker.template.Configuration;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -103,10 +104,19 @@ public class AlarmController {
 
         //发送: 短信/微信/邮件
         //可能有发送策略
-        String notice = alarmCenter.generate(alarm);
-        String TAG = "2";                   //分组编号
-        //NotifyUtils.sendWechatNotifyByTag(TAG, "@all", notice);
-        resultData.put("notice", notice);
+        try {
+            String notice = alarmCenter.generate(alarm);
+            String TAG = "2";                   //分组编号
+            NotifyUtils.sendWechatNotifyByTag(TAG, "@all", notice);
+            resultData.put("notice", notice);
+        }catch (Exception e) {
+            e.printStackTrace();
+            log.info(e.getMessage());
+            resultData.put("result", -10000);
+            resultData.put("msg", "fail");
+            AjaxResponseUtil.returnData(response, "json", resultData);
+            return;
+        }
         resultData.put("result", 10000);
         resultData.put("msg", "success");
         AjaxResponseUtil.returnData(response, "json", resultData);
@@ -165,8 +175,17 @@ public class AlarmController {
     @RequestMapping("/init")
     @ResponseBody
     public String init(HttpServletRequest request, HttpServletResponse response) {
-        alarmFactory.init();
         List<IAlarmCenter> alarmCenters = alarmFactory.getAlarmCenters();
+        for(IAlarmCenter alarmCenter : alarmCenters) {
+            AlarmTemplate alarmTemplate = alarmCenter.getAlarmTemplate();
+            String alarmId = alarmTemplate.getAlarmId();
+            String alarmTitle = alarmTemplate.getAlarmTitle();
+            int totalCount = alarmCenter.getTotalCount();
+            log.info("#alarm statistic#"+ alarmId + "\t" + alarmTitle + "\t" + totalCount);
+        }
+        if (alarmCenters.isEmpty()) {
+            alarmFactory.init();
+        }
         for(IAlarmCenter alarmCenter : alarmCenters) {
             alarmCenter.init();
         }
